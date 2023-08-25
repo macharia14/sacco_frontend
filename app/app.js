@@ -193,7 +193,7 @@ SaccoApp.controller('Header', function($scope, $location){
        }
 });
 
-
+//Signup Controller
 SaccoApp.controller('SignupController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
     //Apply Update
     $scope.updateData = function(email, name, password) {
