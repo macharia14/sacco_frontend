@@ -24,8 +24,31 @@ SaccoApp.config(['$routeProvider', function($routeProvider) {
     }).when('/viewVehicle', {
         templateUrl: 'views/viewVehicle.html',
         controller: 'ViewVehicleController'
+    }).when('/deleteVehicle/:id', {
+        templateUrl: 'views/deleteVehicle.html',
+        controller: 'DeleteVehicleController'
     });
-    
+}]);
+SaccoApp.controller('DeleteVehicleController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
+    //receive ID here
+    $scope.id = $routeParams.id;
+    $scope.Delete = function() {
+        console.log($routeParams.id);
+        $http.delete("http://127.0.0.1:3000/api/deletevehicle/" +$routeParams.id)
+        .then(function(response) {
+            if(response.data){
+                console.log("Response: " + response)
+                $location.path("/viewVehicle")
+            }//end
+        },
+        function(error) {
+            alert("Error: " + error)
+            $location.path("/viewVehicle")
+        }
+        );
+    }
+
+   
 }]);
 //View Driver Controller
 SaccoApp.controller('ViewDriverController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
@@ -124,6 +147,7 @@ SaccoApp.controller('AddVehicleController', ['$scope', '$http', '$location', '$r
 
 //View Vehicle Controller
 SaccoApp.controller('ViewVehicleController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
+    
     var token = localStorage.getItem('token');
     console.log(token);
     if(token==null) {
@@ -155,7 +179,19 @@ SaccoApp.controller('ViewVehicleController', ['$scope', '$http', '$location', '$
 
 
 //Home Controller
-SaccoApp.controller('HomeController', function($scope, $location){
+SaccoApp.controller('HomeController', function($scope, $location, $window){
+    //Reload  This Page
+    var loaded = String(localStorage.getItem("key"));// Key Does Not Exist
+
+    console.log("Msg1"+typeof(loaded));//null
+    if(loaded=="null" || loaded=="false"){
+        console.log("Working");//null
+        localStorage.setItem("key", "true");//set key to true
+        $window.location.reload();
+    }//end
+
+    //Challange - it will reload infinitely
+
     var name = localStorage.getItem('name');
     var token = localStorage.getItem('token');
     if(!name || !token){
@@ -168,6 +204,7 @@ SaccoApp.controller('HomeController', function($scope, $location){
 
       //Do function
       $scope.logout = function(){
+        // localStorage.setItem("key", "null");//set key to null
         console.log("Logout");
         localStorage.clear();
         $location.path('/Signin')    
@@ -195,6 +232,7 @@ SaccoApp.controller('Header', function($scope, $location){
 
 //Signup Controller
 SaccoApp.controller('SignupController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
+    
     //Apply Update
     $scope.updateData = function(email, name, password) {
         var data = {
@@ -221,9 +259,21 @@ SaccoApp.controller('SignupController', ['$scope', '$http', '$location', '$route
 
 }]);
 
-SaccoApp.controller('SigninController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams){
+
+//Signin Controller
+SaccoApp.controller('SigninController', ['$scope', '$http', '$location', '$routeParams', '$window', function($scope, $http, $location, $routeParams, $window){
    
     // $scope.text = "Signin"
+    //Reload  This Page
+    var loaded = String(localStorage.getItem("key"));// Key Does Not Exist
+    console.log("Msg2"+typeof (loaded));//null
+    console.log("Msg2"+loaded);//null
+
+    if(loaded=="null"){ 
+        console.log("Working2");//null
+        localStorage.setItem("key", "false");//set key to false
+        $window.location.reload();
+    }//end
     $scope.updateData = function(email, password) {
         var data = {
             email: email,
