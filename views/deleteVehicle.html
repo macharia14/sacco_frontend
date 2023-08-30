@@ -1,5 +1,27 @@
-<h1>Delete</h1>
-{{id}}
+<!-- The Modal -->
 
+    <div class="modal-dialog">
+      <div class="modal-content">
+  
+        <!-- Modal Header -->
+        <div class="modal-header">
+          <h4 class="modal-title">Delete</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+  
+        <!-- Modal body -->
+        <div class="modal-body">
+          Are you sure you want to Delete?
+        </div>
+  
+        <!-- Modal footer -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger" ng-click="dismiss()">Close</button>
+          <button ng-click = "Delete()" class="btn btn-success">Delete</button>
+        </div>
+  
+      </div>
+    </div>
 
-<button ng-click = "Delete()">Deleter</button>
+  
+

@@ -27,8 +27,69 @@ SaccoApp.config(['$routeProvider', function($routeProvider) {
     }).when('/deleteVehicle/:id', {
         templateUrl: 'views/deleteVehicle.html',
         controller: 'DeleteVehicleController'
+    }).when('/updateVehicle/:id', {
+        templateUrl: 'views/updateVehicle.html',
+        controller: 'UpdateVehicleController'
+    }).when('/removeDriver/:id_number', {
+        templateUrl: 'views/removeDriver.html',
+        controller: 'RemoveDriverController'
     });
 }]);
+//Remove Driver Controller
+SaccoApp.controller('RemoveDriverController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
+    $scope.id_number = $routeParams.id_number;
+
+    $scope.Deactivate = function() {
+        console.log($routeParams.id_number);
+        
+        $http.put("http://127.0.0.1:3000/api/removeDriver/" +$routeParams.id_number)
+        .then(function(response) {
+            if(response.data){
+                console.log("Response: " + response)
+                $location.path("/viewDriver")
+            }//end
+        },
+        function(error) {
+            alert("Error: " + error)
+            $location.path("/viewDriver")
+        }
+        );
+    }  
+    $scope.dismiss=function(){
+        $location.path("/viewDriver")
+    };
+
+}]);
+
+
+
+//Update Controller
+SaccoApp.controller('UpdateVehicleController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
+    $scope.id = $routeParams.id;
+
+
+    $scope.updateData = function(route ) {
+        var data = {
+            route: route
+        }
+    // $scope.text = "Signup view"
+     // Apply $http put service
+     $http.put('http://127.0.0.1:3000/api/updateRoute/' +$routeParams.id, JSON.stringify(data)).then(function (response) {
+        //var json = JSON.parse(response)
+        console.log(response.data)
+        if (response.data){
+            $scope.msg = "Updated Successfully";
+            $location.path('/viewVehicle')
+        }
+    }, function (response) {
+        $scope.msg = "Service Does Not Exist."
+
+    });
+}
+
+
+}]);
+//Remove Vehicle
 SaccoApp.controller('DeleteVehicleController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
     //receive ID here
     $scope.id = $routeParams.id;
@@ -46,9 +107,12 @@ SaccoApp.controller('DeleteVehicleController', ['$scope', '$http', '$location', 
             $location.path("/viewVehicle")
         }
         );
-    }
+    }  
+    $scope.dismiss=function(){
+        $location.path("/viewVehicle")
+    };
 
-   
+
 }]);
 //View Driver Controller
 SaccoApp.controller('ViewDriverController', ['$scope', '$http', '$location', '$routeParams', function($scope, $http, $location, $routeParams) {
@@ -57,11 +121,9 @@ SaccoApp.controller('ViewDriverController', ['$scope', '$http', '$location', '$r
     if(token==null) {
       $location.path("/Signin");
     }
-
     var data = {
         flag: true
     }
-
     var config = {
         headers: {
              'Authorization': 'Bearer ' + token
@@ -108,6 +170,7 @@ SaccoApp.controller('AddDriverController', ['$scope', '$http', '$location', '$ro
         }
     }, function (response) {
         $scope.msg = "Service Does Not Exist."
+
 
     });
 }

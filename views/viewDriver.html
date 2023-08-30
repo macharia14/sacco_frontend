@@ -15,15 +15,43 @@
                 <th>DL Number</th>
                 <th>ID Number</th>
                 <th>Image URL</th>
+                <th>Status</th>
+
 
             </tr>
             <tr ng-repeat="driver in drivers ">
                 <td>{{driver.reg_no}}</td>
                 <td>{{driver.surname}}</td>
+               
                 <td>{{driver.others}}</td>
                 <td>{{driver.dl_number}}</td>
                 <td>{{driver.id_number}}</td>
-                <td>{{driver.img_url}}</td>
+                <td> <img src="http://127.0.0.1:3000/api/uploads/{{driver.img_url}}" alt="" srcset="" width="70"> </td>
+                <td>
+                    <div ng-if="driver.flag" class="d-flex">
+                        <!-- This content will be displayed if driver.flag is true -->
+                        <div style="background-color: green; text-align: center; color: aliceblue;" class="flex-grow-1">
+                            <b>Allocated</b>
+                        </div>
+                        <div class="flex-grow-1">
+                            <a href="#!/removeDriver/{{driver.id_number}}" class="btn btn-info btn-sm">Deactivate</a>
+                        </div>
+
+                    </div>
+                    
+                    <div ng-if ="!driver.flag" class="d-flex">
+                        <!-- This content will be displayed if driver.flag is true -->
+                        <div style="background-color: red; text-align: center; color: aliceblue;" class="flex-grow-1">
+                            <b>Not Allocated</b>
+                        </div>
+                        <div class="flex-grow-1">
+                            <a href="#!/allocateDriver/{{driver.id_number}}" class="btn btn-warning btn-sm">Allocate</a>
+
+                        </div>
+
+                    </div>
+                </td>
+             
             </tr>
          </table>
     </div>
